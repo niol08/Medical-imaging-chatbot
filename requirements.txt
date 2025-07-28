@@ -1,0 +1,15 @@
+streamlit
+torch
+torchvision
+transformers
+Pillow
+opencv-python
+scikit-learn
+numpy
+torchxrayvision
+timm
+transformers>=4.39
+accelerate       
+huggingface_hub 
+dotenv
+
