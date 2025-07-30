@@ -12,9 +12,16 @@ from transformers import AutoImageProcessor, AutoModelForImageClassification
 
 
 
-
 load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "")
+
+
+def get_gemini_api_key():
+    try:
+        return st.secrets["GEMINI_API_KEY"]
+    except:
+        return os.getenv("GEMINI_API_KEY", "")
+
+GEMINI_API_KEY = get_gemini_api_key()
 
 st.set_page_config(page_title="Medical Imaging Chatbot", page_icon="🧠", layout="centered")
 st.title("Medical Imaging Chatbot")
