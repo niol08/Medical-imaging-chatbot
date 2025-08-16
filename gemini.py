@@ -30,4 +30,4 @@ def query_gemini_rest(signal_type, label, confidence, api_key):
         content = response.json()
         return content["candidates"][0]["content"]["parts"][0]["text"]
     except Exception as e:
-        return f"⚠️ Gemini API error: {str(e)}"
+        return f"Gemini API error: {str(e)}"

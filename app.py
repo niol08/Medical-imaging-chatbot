@@ -23,14 +23,14 @@ def get_gemini_api_key():
 
 GEMINI_API_KEY = get_gemini_api_key()
 
-st.set_page_config(page_title="Medical Imaging Chatbot", page_icon="🧠", layout="centered")
+st.set_page_config(page_title="Medical Imaging Chatbot", page_icon=" ", layout="centered")
 st.title("Medical Imaging Chatbot")
 
 tabs = st.tabs(["fMRI Classifier", "X-ray Classifier", "NMR Diagnostic"])
 with tabs[0]:
     st.header("fMRI Brain Tumor Classification")
 
-    with st.expander("📄 fMRI Image Requirements"):
+    with st.expander("fMRI Image Requirements"):
         st.markdown(
             "- Upload a `.jpg` or `.png` file of a **2D MRI/fMRI slice**.\n"
             "- Recommended size: at least **224x224** pixels.\n"
@@ -40,7 +40,7 @@ with tabs[0]:
         variant = st.radio("Choose model variant", ["f (Fast)", "c (Compact)"])
         variant_key = "f" if variant.startswith("f") else "c"
 
-        @st.cache_resource(show_spinner="🔄 Downloading & loading Vbai‑TS model…")
+        @st.cache_resource(show_spinner="Downloading & loading Vbai‑TS model…")
         def load_fmri_model(v_key: str):
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -97,7 +97,7 @@ with tabs[0]:
             api_key = os.getenv("GEMINI_API_KEY", "")
             if api_key:
                 explanation = query_gemini_rest("fMRI", label, conf.item(), api_key)
-                st.markdown("### 🧠 Gemini Insight")
+                st.markdown("### Gemini Insight")
                 st.write(explanation)
             else:
                 st.info("Gemini API key missing – no explanation generated.")
@@ -107,7 +107,7 @@ with tabs[0]:
 
 
 with tabs[1]:
-    st.header("📷 X‑Ray Diagnostic")
+    st.header("X‑Ray Diagnostic")
 
     region = st.radio(
         "Region to analyse",
@@ -123,7 +123,7 @@ with tabs[1]:
         LABELS      = ["Fractured", "Not Fractured"]
 
 
-    @st.cache_resource(show_spinner="🔄 Loading X‑ray model…")
+    @st.cache_resource(show_spinner="Loading X‑ray model…")
     def load_xray_assets(name):
         proc  = AutoImageProcessor.from_pretrained(name)
         model = AutoModelForImageClassification.from_pretrained(name)
@@ -150,7 +150,7 @@ with tabs[1]:
         if api_key:
             best_idx = int(probs.argmax())
             explain  = query_gemini_rest("X‑Ray", LABELS[best_idx], float(probs[best_idx]), api_key)
-            st.markdown("### 🧠 Gemini Insight")
+            st.markdown("### Gemini Insight")
             st.write(explain)
         else:
             st.info("Gemini key missing – no explanation generated.")
@@ -159,14 +159,14 @@ with tabs[1]:
 
 
 with tabs[2]:
-    st.header("🧲 NMR (MRI) Diagnostic")
+    st.header("NMR (MRI) Diagnostic")
 
     MODEL = "prithivMLmods/BrainTumor-Classification-Mini"
     LABELS = ["No Tumor", "Glioma", "Meningioma", "Pituitary"]
 
     from transformers import AutoImageProcessor, AutoModelForImageClassification
 
-    @st.cache_resource(show_spinner="📦 Loading MRI model…")
+    @st.cache_resource(show_spinner="Loading MRI model…")
     def load_mri_model():
         proc  = AutoImageProcessor.from_pretrained(MODEL)
         mdl   = AutoModelForImageClassification.from_pretrained(MODEL)
@@ -193,7 +193,7 @@ with tabs[2]:
         if api_key:
             best = int(probs.argmax())
             explanation = query_gemini_rest("MRI", LABELS[best], float(probs[best]), api_key)
-            st.markdown("### 🧠 Gemini Insight")
+            st.markdown("### Gemini Insight")
             st.write(explanation)
         else:
             st.info("Gemini key missing – no explanation generated.")
